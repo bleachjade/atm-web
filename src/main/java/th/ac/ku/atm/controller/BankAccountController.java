@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import th.ac.ku.atm.model.BankAccount;
 import th.ac.ku.atm.model.Customer;
+import th.ac.ku.atm.model.Money;
 import th.ac.ku.atm.service.BankAccountService;
 import th.ac.ku.atm.service.CustomerService;
 
@@ -52,6 +53,24 @@ public class BankAccountController {
     @PostMapping("/delete/{id}")
     public String deleteAccount(@ModelAttribute BankAccount bankAccount) {
         accountService.deleteBankAccount(bankAccount);
+        return "redirect:/bankaccount";
+    }
+
+    @PostMapping("/deposit/{id}")
+    public String depositAccount(@PathVariable int id,
+                                 @ModelAttribute Money money,
+                                 Model model) {
+        accountService.depositBankAccount(id, money);
+        model.addAttribute("bankaccounts",accountService.getBankAccounts());
+        return "redirect:/bankaccount";
+    }
+
+    @PostMapping("/withdraw/{id}")
+    public String withdrawBankAccount(@PathVariable int id,
+                                      @ModelAttribute Money money,
+                                      Model model) {
+        accountService.withdrawBankAccount(id, money);
+        model.addAttribute("bankaccounts",accountService.getBankAccounts());
         return "redirect:/bankaccount";
     }
 
